@@ -10,9 +10,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-
 import cn.jsu.rjxy.wd.sql.DatabaseConnection;
+import cn.jsu.rjxy.wd.writeFileDao.AddToFile;
 
 import java.awt.Color;
 
@@ -141,51 +140,49 @@ public class Login extends JFrame {
 		
 		btn01QD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(checkInputZH() & checkInputMM()&&rdbtnYH.isSelected()) {
-					
-					UserID = textF01ZH.getText();//保存ID到加购按钮事件
-	                String PassWord = textF01PsW.getText();
-	                String sql = "select * from usertable where UserID=? and PassWord=?";
-            	    String[] str = new String[] {UserID ,  PassWord};
-            	    ResultSet rs= new DatabaseConnection().search(sql, str);
-            	   try {
-					if(rs.next()) {
-						   JOptionPane.showMessageDialog(null, "用户登录成功");						   	   
-          //跳转到用户查看商品窗口
-					    JFrame frame=UserGs.getIns();//单例
-					    frame.setVisible(true);
-					   }				
-					else
-						JOptionPane.showMessageDialog(null, "登录失败！请重新输入");
-				}  catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				}
-				
-				else if(rdbtnGLY.isSelected()&&checkInputZH() & checkInputMM()) {
-					String MagID = textF01ZH.getText();
-	                String ManPsW = textF01PsW.getText();
-	                String sql = "select * from managertable where MagID=? and ManPsW=?";
-            	    String[] str = new String[] {MagID,  ManPsW};
-            	    ResultSet rs=  new DatabaseConnection().search(sql, str);
-            	    try {
-						if(rs.next()) {
-							JOptionPane.showMessageDialog(null, "管理员登录成功");
-						   //跳转到管理员窗口查看商品
-						   JFrame frame1=ManagerGs.getIns();
-						  frame1.setVisible(true);
-						}
-						else
+				if (checkInputZH() & checkInputMM() && rdbtnYH.isSelected()) {
+
+					UserID = textF01ZH.getText();// 保存ID到加购按钮事件
+					String PassWord = textF01PsW.getText();
+					String sql = "select * from usertable where UserID=? and PassWord=?";
+					String[] str = new String[] { UserID, PassWord };
+					ResultSet rs = new DatabaseConnection().search(sql, str);// 返回数据库结果集
+					try {
+						if (rs.next()) {
+							JOptionPane.showMessageDialog(null, "登录成功！欢迎光临本商城，快来选购吧！");
+							AddToFile.writeFile();//注册的用户写入文件保存
+							// 跳转到用户查看商品窗口
+							JFrame frame = UserGs.getIns();// 单例
+							frame.setVisible(true);
+						} else
 							JOptionPane.showMessageDialog(null, "登录失败！请重新输入");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
-					
 				}
-				else
+				
+				else if (rdbtnGLY.isSelected() && checkInputZH() & checkInputMM()) {
+					String MagID = textF01ZH.getText();
+					String ManPsW = textF01PsW.getText();
+					String sql = "select * from managertable where MagID=? and ManPsW=?";
+					String[] str = new String[] { MagID, ManPsW };
+					ResultSet rs = new DatabaseConnection().search(sql, str);
+					try {
+						if (rs.next()) {
+							JOptionPane.showMessageDialog(null, "管理员登录成功");
+							// 跳转到管理员窗口查看商品
+							JFrame frame1 = ManagerGs.getIns();
+							frame1.setVisible(true);
+						} else
+							JOptionPane.showMessageDialog(null, "登录失败！请重新输入");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else
 					JOptionPane.showMessageDialog(null, "登录失败");
 
-			}	
+			}
 		});
 		btn01QD.setBounds(126, 223, 127, 23);
 		getContentPane().add(btn01QD);
@@ -221,8 +218,8 @@ public class Login extends JFrame {
 	 * // 判断输入ID是否为空
 	 * @return
 	 */
-	public boolean checkInputZH() {//ID
-		//判断字符串是否为空
+	public boolean checkInputZH() {// ID
+		// 判断字符串是否为空
 		String id = textF01ZH.getText();
 		if (id.length() == 0) {
 			lbl01.setText("不能为空");
@@ -230,11 +227,13 @@ public class Login extends JFrame {
 		}
 		return true;
 	}
+
 	/**
-	 *  判断输入密码是否为空
+	 * 判断输入密码是否为空
+	 * 
 	 * @return
 	 */
-public  boolean checkInputMM() {	
+	public boolean checkInputMM() {
 		String mm = textF01PsW.getText();
 		if (mm.length() == 0) {
 			lbl02.setText("不能为空");

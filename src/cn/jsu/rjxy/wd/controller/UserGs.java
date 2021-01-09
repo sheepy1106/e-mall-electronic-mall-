@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import cn.jsu.rjxy.wd.sql.DB;
-import cn.jsu.rjxy.wd.sql.DataOperate;
+import cn.jsu.rjxy.wd.sql.DataAddToJTable;
 import cn.jsu.rjxy.wd.sql.DatabaseConnection;
 
 import java.awt.Toolkit;
@@ -68,7 +68,7 @@ public class UserGs extends JFrame{
 		//商品表,"GsNum"
 		Collections.addAll(titles, "GsID", "GsName", "GsPrice");
 		String sql="select * from goodstable order by GsPrice asc";//定义查询语句---order by排序！
-		Vector<Vector> stuInfo = DataOperate.getSelectAll(sql);// 从数据库中读取所有行数据
+		Vector<Vector> stuInfo = DataAddToJTable.getSelectAll(sql);// 从数据库中读取所有行数据
 
 		model = new DefaultTableModel(stuInfo, titles) ;
 		table = new JTable(model);// 使用DefaultTableModel数据模型实例化表格
@@ -91,11 +91,13 @@ public class UserGs extends JFrame{
 				String a = String.valueOf(txtKeyF.getText());
 				String[] str = new String[] {a};
 				String sql = "select * from goodstable where GsName=?";//按名称
-				ResultSet rst=new DatabaseConnection().search(sql,str);
+				ResultSet rst=new DatabaseConnection().search(sql,str);//在数据库里查询返回结果集
 				try {
 					if(rst.next()) {
-						JOptionPane.showMessageDialog(null,"查找成功！"+"商品ID:"+rst.getString(1)+"商品名称"+rst.getString(2)+"商品价格:"+rst.getString(3)+"商品数量："+rst.getString(4)+"商品种类："+rst.getNString(5));
+						JOptionPane.showMessageDialog(null,"查找成功！喜欢它就立即加购吧  "+"商品ID:"+rst.getString(1)+"商品名称"+rst.getString(2)+"商品价格:"+rst.getString(3)+"商品数量："+rst.getString(4)+"商品种类："+rst.getNString(5));
 					}
+					else
+						JOptionPane.showMessageDialog(null, "查找失败，请重新确定商品名称：");
 				} catch (SQLException e1) {	
 					e1.printStackTrace();
 				}
@@ -125,7 +127,7 @@ public class UserGs extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				int count=table.getSelectedRow();////获取你选中的行号（记录）
-				String GsID= table.getValueAt(count, 0).toString();//读取获取行号的某一列的值（也就是字段）
+				String GsID= table.getValueAt(count, 0).toString();//读取获取行号的GsID的值（也就是字段）
 				String shopNum=DB.getShoppingNum().toString();//获得订单编号
 				String date=DB.getTime();//获得当前时间
 				
@@ -138,7 +140,10 @@ public class UserGs extends JFrame{
 				    pst.setString(3, shopNum);
 				   pst.setString(4, date);
 				    pst.executeUpdate();//executeUpdate
-				    JOptionPane.showMessageDialog(null,"加购成功！");
+				    JOptionPane.showMessageDialog(null,"加购成功！要不要再看看其他商品？");
+				    //顺便更新一下订单表
+				    String sql1="update into shop(GsID,UserID,shoppingNum,shoppingTime) values(?,?,?,?)";
+					
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

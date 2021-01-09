@@ -65,7 +65,7 @@ public class DatabaseConnection {
 				return a;//执行条数
 			}
 		/**
-		 * 查询sql
+		 * 查询sjk里的数据
 		 * @param sql
 		 * @param str
 		 * @return

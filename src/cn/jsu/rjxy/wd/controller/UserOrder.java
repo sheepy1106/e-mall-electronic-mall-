@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import cn.jsu.rjxy.wd.sql.DataOperate;
+import cn.jsu.rjxy.wd.sql.DataAddToJTable;
 import cn.jsu.rjxy.wd.sql.DatabaseConnection;
 import java.awt.Toolkit;
 /**
@@ -67,7 +67,7 @@ public class UserOrder extends JFrame {
 			Collections.addAll(titles, "GsID", "UserID", "shoppingNum","shoppingTime");
 	
 			String sql="select * from shop";//定义查询语句
-			Vector<Vector> stuInfo = DataOperate.getSelectAll2(sql);// 查看订单-数据库
+			Vector<Vector> stuInfo = DataAddToJTable.getSelectAll2(sql);// 查看订单-数据库
 			model = new DefaultTableModel(stuInfo, titles);
 			table = new JTable(model);// 使用DefaultTableModel数据模型实例化表格
 			table = new JTable(stuInfo,titles);// 使用静态数据实例化表格
@@ -105,10 +105,10 @@ public class UserOrder extends JFrame {
 					ResultSet rst=new DatabaseConnection().search(sql,str);
 					try {
 						if(rst.next()) {
-							JOptionPane.showMessageDialog(null,"查找成功！"+"商品ID:"+rst.getString(1)+"用户ID："+rst.getString(2)+"订单号:"+rst.getString(3)+"订单时间："+rst.getString(4));
+							JOptionPane.showMessageDialog(null,"查找成功！"+" 商品ID:"+rst.getString(1)+"用户ID："+rst.getString(2)+"订单号:"+rst.getString(3)+"订单时间："+rst.getString(4));
 						}
 						else
-							JOptionPane.showMessageDialog(null,"查找失败！请重新输入");
+							JOptionPane.showMessageDialog(null,"查找失败！确定输入没错吗？请再输入一次：");
 					} catch (SQLException e1) {	
 						e1.printStackTrace();
 					}

@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import cn.jsu.rjxy.wd.sql.DataOperate;
+import cn.jsu.rjxy.wd.sql.DataAddToJTable;
 import cn.jsu.rjxy.wd.sql.DatabaseConnection;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -88,7 +88,7 @@ public class ManagerGs extends JFrame {
 				titles = new Vector<String>();// 定义动态数组表示表格标题
 				Collections.addAll(titles, "GsID", "GsName", "GsPrice","GsNum");
 				String sql="select * from goodstable order by GsPrice asc ";//定义查询语句
-				Vector<Vector> stuInfo = DataOperate.getSelectAll(sql);// 从数据库中读取所有行数据
+				Vector<Vector> stuInfo = DataAddToJTable.getSelectAll(sql);// 从数据库中读取所有行数据
 				//使用静态数据创建DefaultTableModel数据模型
 				model = new DefaultTableModel(stuInfo, titles);				
 				table = new JTable(model);// 使用DefaultTableModel数据模型实例化表格

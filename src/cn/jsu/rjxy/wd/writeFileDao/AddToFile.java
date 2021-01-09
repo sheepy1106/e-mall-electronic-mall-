@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.swing.JOptionPane;
+
 import cn.jsu.rjxy.wd.controller.Register;
 
 /**
@@ -23,6 +25,7 @@ public class AddToFile {
 		String str3=Register.PassWord;
 		String str4=str1+"\t"+str2+"\t"+str3+"\n";
 		out.write(str4);
+		//JOptionPane.showMessageDialog(null, "用户登录成功");
 		System.out.println("已成功写入文件！");
 		out.close();
     }
